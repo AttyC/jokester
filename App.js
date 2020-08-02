@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import JokeList from './components/JokeList'
+
 export default function App() {
 
   const [jokes, setJokes] = useState([]);
@@ -26,6 +28,7 @@ export default function App() {
   return (
     <View style={styles.container}>
        <Text>Welcome to the Jokester App!</Text>
+       <JokeList jokes={jokes} />
       <StatusBar style="auto" />
 
     </View>
