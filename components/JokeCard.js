@@ -12,6 +12,8 @@ export default function JokeCard({joke, refreshJokes}) {
 
   const likeJoke = () => {
 
+    console.log('pressed like')
+    
     let existingJokes = JSON.parse(localStorage.getItem(process.env.LOCALSTORAGE_KEY)) || [];
 
     let newJoke = {
@@ -25,13 +27,9 @@ export default function JokeCard({joke, refreshJokes}) {
     existingJokes.push(newJoke);
 
     localStorage.setItem(process.env.LOCALSTORAGE_KEY, JSON.stringify(existingJokes));
-    refreshJokes();
-
   }
 
   const dislikeJoke = () => {
-
-    console.log('pressed')
 
     let existingJokes = JSON.parse(localStorage.getItem(process.env.LOCALSTORAGE_KEY)) || [];
 
@@ -46,33 +44,32 @@ export default function JokeCard({joke, refreshJokes}) {
     existingJokes.push(newJoke);
 
     localStorage.setItem(process.env.LOCALSTORAGE_KEY, JSON.stringify(existingJokes));
-    refreshJokes();
 
   }
 
   return (
     <View style={styles.container}>
-    <Text style={styles.card}>
-      <View>
-        <Text style={styles.setup}>{joke.setup}</Text>
-        <Text>{joke.punchline}</Text>
-      </View>
-      <TouchableOpacity style={styles.ImageIconStyle} activeOpacity={1} onPress={likeJoke}>
-        <Image
-        source={likeImage}
-        style={[(joke.like) ? styles.hasLiked : styles.defaultIcon]}
-        />
-        <Text style={styles.TextStyle}> Like </Text>
-    </TouchableOpacity>
+      <Text style={styles.card}>
+        <View>
+          <Text style={styles.setup}>{joke.setup}</Text>
+          <Text style={styles.punchline}>{joke.punchline}</Text>
+        </View>
+        <TouchableOpacity style={styles.ImageIconStyle} activeOpacity={1} onPress={likeJoke}>
+          <Image
+          source={likeImage}
+          style={[(joke.like) ? styles.hasLiked : styles.defaultIcon]}
+          />
+          <Text style={styles.TextStyle}> Like </Text>
+        </TouchableOpacity>
 
-    <TouchableOpacity style={styles.ImageIconStyle} activeOpacity={1} onPress={dislikeJoke}>
-        <Image
-        source={dislikeImage}
-        style={[(joke.dislike) ? styles.hasDisliked : styles.defaultIcon]}
-        />
-        <Text style={styles.TextStyle}> Dislike </Text>
-    </TouchableOpacity>
-    </Text>
+        <TouchableOpacity style={styles.ImageIconStyle} activeOpacity={1} onPress={dislikeJoke}>
+            <Image
+            source={dislikeImage}
+            style={[(joke.dislike) ? styles.hasDisliked : styles.defaultIcon]}
+            />
+            <Text style={styles.TextStyle}> Dislike </Text>
+        </TouchableOpacity>
+      </Text>
     </View>
   )
 }
@@ -99,7 +96,7 @@ const styles = StyleSheet.create({
   },
   punchline: {
     display: 'block',
-    marginBottom: 20
+    paddingBottom: 20
   },
   defaultIcon: {
     flexDirection: 'row',
@@ -142,14 +139,11 @@ const styles = StyleSheet.create({
     height: 40,
     width: 100,
     borderRadius: 5,
-    margin: 5,
-    resizeMode: 'stretch',
+    margin: 5
   },
   TextStyle: {
     color: '#000',
     marginBottom: 4,
     marginRight: 20,
   },
-
-
 });
