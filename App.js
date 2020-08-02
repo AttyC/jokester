@@ -22,10 +22,7 @@ export default function App() {
   }
 
   const loadJokesFromLocalStorage = () => { 
-    
     const json = window.localStorage.getItem(process.env.LOCALSTORAGE_KEY)
-
-     console.log('json', json)
     setJokesLocalStorage(json);
   } 
 
@@ -36,12 +33,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-       <Text><h1 className="text-center mb-5">Jokes list </h1></Text>
-
-       <h1 className="text-center mb-5">Jokes API </h1>
-       <JokeList jokes={jokesAPI} refreshJokes={loadJokesFromAPI} typeofJ={'API'}/>
-
-       <h1 className="text-center mb-5">Jokes Local Storage </h1>
+       <Text style={styles.headerText}>Welcome to Jokester!</Text>
+       <JokeList jokes={jokesAPI} refreshJokes={loadJokesFromAPI}/>
        <JokeList jokes={jokesLocalStorage} refreshJokes={loadJokesFromLocalStorage}/>
 
       <StatusBar style="auto" />
@@ -53,8 +46,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  headerText: {
+    fontSize: 26,
+    fontWeight: 'bold'
+  }
 });

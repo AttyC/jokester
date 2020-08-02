@@ -4,14 +4,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import JokeCard from './JokeCard';
 
 export default function JokeList({jokes, refreshJokes}) {
-  console.log('toj', jokes)
 
   if (typeof jokes == 'string') {
     jokes = JSON.parse(jokes)
   }
   return (
     <View style={styles.container}>
-       <Text>Welcome to the Jokester App LIST!</Text>
       <StatusBar style="auto" />
    
       {jokes && jokes.map(joke => <JokeCard 

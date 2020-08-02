@@ -1,8 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+
+import { Image,  StyleSheet, Text, View, Button, ImageBackground, TouchableOpacity} from 'react-native';
+import like from './smile2x.png'; 
+import dislike from './frown2x.png'; 
 
 export default function JokeCard({joke, refreshJokes}) {
+
+  let likeImage = require('./smile2x.png')
+  let dislikeImage = require('./frown2x.png')
 
   const likeJoke = () => {
 
@@ -12,7 +18,7 @@ export default function JokeCard({joke, refreshJokes}) {
       'type': joke.type,
       'setup': joke.setup,
       'punchline': joke.punchline,
-      'liked': true,
+      'like': true,
       'dislike': false
     }
 
@@ -23,19 +29,127 @@ export default function JokeCard({joke, refreshJokes}) {
 
   }
 
+  const dislikeJoke = () => {
+
+    console.log('pressed')
+
+    let existingJokes = JSON.parse(localStorage.getItem(process.env.LOCALSTORAGE_KEY)) || [];
+
+    let newJoke = {
+      'type': joke.type,
+      'setup': joke.setup,
+      'punchline': joke.punchline,
+      'like': false,
+      'dislike': true
+    }
+
+    existingJokes.push(newJoke);
+
+    localStorage.setItem(process.env.LOCALSTORAGE_KEY, JSON.stringify(existingJokes));
+    refreshJokes();
+
+  }
+
   return (
-    <div className="card">
-      <div className="card-body">
-        <p>{joke.setup}</p>
-        <p>{joke.punchline}</p>
+    <View style={styles.container}>
+    <Text style={styles.card}>
+      <View>
+        <Text style={styles.setup}>{joke.setup}</Text>
+        <Text>{joke.punchline}</Text>
+      </View>
+      <TouchableOpacity style={styles.ImageIconStyle} activeOpacity={1} onPress={likeJoke}>
+        <Image
+        source={likeImage}
+        style={[(joke.like) ? styles.hasLiked : styles.defaultIcon]}
+        />
+        <Text style={styles.TextStyle}> Like </Text>
+    </TouchableOpacity>
 
-        <p>{joke.liked}</p>
-      </div>
-
-      <div className="card-footer">
-        <button className="btn btn-warning mr-2" onClick={likeJoke}>Like</button>
-        {/* <button className="btn btn-danger" onClick={dislikeJoke}>Dislike</button> */}
-      </div>
-    </div>
+    <TouchableOpacity style={styles.ImageIconStyle} activeOpacity={1} onPress={dislikeJoke}>
+        <Image
+        source={dislikeImage}
+        style={[(joke.dislike) ? styles.hasDisliked : styles.defaultIcon]}
+        />
+        <Text style={styles.TextStyle}> Dislike </Text>
+    </TouchableOpacity>
+    </Text>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  card: {
+    width: 300,
+    backgroundColor: '#FFE6E2',
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 25,
+    fontSize: '16px'
+  }, 
+  setup: {
+    fontWeight: 'bold',
+    display: 'block',
+    marginBottom: 10
+  },
+  punchline: {
+    display: 'block',
+    marginBottom: 20
+  },
+  defaultIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'lightgrey',
+    height: 40,
+    width: 50,
+    borderRadius: 5,
+    margin: 5,
+  },
+  hasLiked: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#7DE4A6',
+    height: 40,
+    width: 50,
+    borderRadius: 5,
+    margin: 5,
+  },
+  hasDisliked: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FA8775',
+    height: 40,
+    width: 50,
+    borderRadius: 5,
+    margin: 5,
+  },
+  MainContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+
+  ImageIconStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    height: 40,
+    width: 100,
+    borderRadius: 5,
+    margin: 5,
+    resizeMode: 'stretch',
+  },
+  TextStyle: {
+    color: '#000',
+    marginBottom: 4,
+    marginRight: 20,
+  },
+
+
+});
