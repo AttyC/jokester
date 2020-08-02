@@ -6,29 +6,44 @@ import JokeList from './components/JokeList'
 
 export default function App() {
 
-  const [jokes, setJokes] = useState([]);
+  const [jokesAPI, setJokesAPI] = useState([]);
+  const [jokesLocalStorage, setJokesLocalStorage] = useState([]);
 
-  const loadJokes = async() => {
+  const loadJokesFromAPI = async() => {
 
     try {
       const res = await fetch('https://official-joke-api.appspot.com/random_ten');
-      const jokes = await res.json();
-      setJokes(jokes);
+      const jokesAPI = await res.json();
+      setJokesAPI(jokesAPI);
+
     } catch(err){
       console.error(err); 
     }
-
   }
 
+  const loadJokesFromLocalStorage = () => { 
+    
+    const json = window.localStorage.getItem(process.env.LOCALSTORAGE_KEY)
+
+     console.log('json', json)
+    setJokesLocalStorage(json);
+  } 
+
   useEffect(() => {
-    loadJokes();
+    loadJokesFromAPI();
+    loadJokesFromLocalStorage();
   }, [])
 
-  console.log('jokes', jokes)
   return (
     <View style={styles.container}>
-       <Text>Welcome to the Jokester App!</Text>
-       <JokeList jokes={jokes} />
+       <Text><h1 className="text-center mb-5">Jokes list </h1></Text>
+
+       <h1 className="text-center mb-5">Jokes API </h1>
+       <JokeList jokes={jokesAPI} refreshJokes={loadJokesFromAPI} typeofJ={'API'}/>
+
+       <h1 className="text-center mb-5">Jokes Local Storage </h1>
+       <JokeList jokes={jokesLocalStorage} refreshJokes={loadJokesFromLocalStorage}/>
+
       <StatusBar style="auto" />
 
     </View>
